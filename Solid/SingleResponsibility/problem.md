@@ -1,4 +1,4 @@
-Low-Level Design Problem Statement:
+### Low-Level Design Problem Statement:
 
 Design a class for a simple banking system that adheres to the Single Responsibility Principle (SRP). The class should represent a bank account and be responsible for managing basic operations such as depositing funds, withdrawing funds, and checking the account balance.
 
