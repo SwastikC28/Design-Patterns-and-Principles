@@ -1,0 +1,3 @@
+### Problem Statement:
+
+Develop a library management system that adheres to the Open-Closed Principle. The system should allow for the addition of new types of library materials (e.g., books, DVDs, CDs) without modifying existing code. Additionally, it should be capable of extending functionality to support different types of users (e.g., students, faculty, guests) with minimal impact on the existing codebase. Implementing this system should facilitate easy maintenance, scalability, and adaptability to future requirements without the need for extensive code modification.
