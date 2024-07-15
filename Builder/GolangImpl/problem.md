@@ -1,0 +1,3 @@
+## Problem Statement
+
+Design a system for an online food ordering platform that allows users to place orders from multiple restaurants. The system should support various features such as browsing menus, adding items to the cart, selecting delivery or pickup options, applying discounts, and processing payments. Implement the system using the Builder design principle to ensure flexibility in constructing complex objects representing orders and to facilitate the addition of new features or modifications in the future without extensive changes to the existing codebase.
