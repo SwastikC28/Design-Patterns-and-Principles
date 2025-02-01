@@ -8,20 +8,22 @@ type Game interface {
 }
 
 type gameImpl struct {
-	boardSize int
-	board     Board
-	players   []*Player
-	finished  bool
-	winner    *Player
+	boardSize  int
+	board      Board
+	players    []*Player
+	finished   bool
+	winner     *Player
+	winchecker WinChecker
 }
 
-func NewGame(boardSize int, players ...*Player) Game {
+func NewGame(boardSize int, winChecker WinChecker, players ...*Player) Game {
 	game := &gameImpl{
-		board:     NewBoard(boardSize),
-		boardSize: boardSize,
-		players:   make([]*Player, 0),
-		finished:  false,
-		winner:    nil,
+		board:      NewBoard(boardSize),
+		boardSize:  boardSize,
+		players:    make([]*Player, 0),
+		finished:   false,
+		winner:     nil,
+		winchecker: winChecker,
 	}
 
 	game.players = append(game.players, players...)

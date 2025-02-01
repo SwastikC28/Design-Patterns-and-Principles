@@ -9,6 +9,7 @@ type Board interface {
 	MarkPosition(int, int, *Player) error
 	CheckWinner(row, col int) bool
 	ShowBoard()
+	GetGrid() [][]*Piece
 }
 
 type boardImpl struct {
@@ -82,6 +83,10 @@ func (board *boardImpl) ShowBoard() {
 	}
 
 	fmt.Println()
+}
+
+func (board *boardImpl) GetGrid() [][]*Piece {
+	return board.grid
 }
 
 func (board *boardImpl) horizontalCheck(row, col int) bool {

@@ -20,9 +20,19 @@ func main() {
 
 	player1 := model.NewPlayer("PlayerX", pieceX)
 	player2 := model.NewPlayer("PlayerY", pieceY)
-	boardSize := 3
 
-	game := model.NewGame(boardSize, player1, player2)
+	boardSize := 3
+	var winChecker model.WinChecker
+
+	switch boardSize {
+	case 3:
+		winChecker = &model.TicTacToeWinChecker{}
+	default:
+		fmt.Println("Invalid Board Size")
+		return
+	}
+
+	game := model.NewGame(boardSize, winChecker, player1, player2)
 	winner := game.Start()
 	if winner != nil {
 		fmt.Println("Winner of the game is", winner.GetName())
