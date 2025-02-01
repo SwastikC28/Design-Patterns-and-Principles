@@ -22,8 +22,8 @@ func main() {
 	player2 := model.NewPlayer("PlayerY", pieceY)
 
 	boardSize := 3
-	var winChecker model.WinChecker
 
+	var winChecker model.WinChecker
 	switch boardSize {
 	case 3:
 		winChecker = &model.TicTacToeWinChecker{}
@@ -32,7 +32,18 @@ func main() {
 		return
 	}
 
-	game := model.NewGame(boardSize, winChecker, player1, player2)
+	// Open Closed Principle
+	choice := "CLI"
+	var inputHandler model.InputHandler
+	switch choice {
+	case "CLI":
+		inputHandler = &model.CLIInputHandler{}
+	default:
+		fmt.Println("Invalid Input Handler")
+		return
+	}
+
+	game := model.NewGame(boardSize, winChecker, inputHandler, player1, player2)
 	winner := game.Start()
 	if winner != nil {
 		fmt.Println("Winner of the game is", winner.GetName())

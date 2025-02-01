@@ -8,22 +8,24 @@ type Game interface {
 }
 
 type gameImpl struct {
-	boardSize  int
-	board      Board
-	players    []*Player
-	finished   bool
-	winner     *Player
-	winchecker WinChecker
+	boardSize    int
+	board        Board
+	players      []*Player
+	finished     bool
+	winner       *Player
+	winchecker   WinChecker
+	inputHandler InputHandler
 }
 
-func NewGame(boardSize int, winChecker WinChecker, players ...*Player) Game {
+func NewGame(boardSize int, winChecker WinChecker, inputHandler InputHandler, players ...*Player) Game {
 	game := &gameImpl{
-		board:      NewBoard(boardSize),
-		boardSize:  boardSize,
-		players:    make([]*Player, 0),
-		finished:   false,
-		winner:     nil,
-		winchecker: winChecker,
+		board:        NewBoard(boardSize),
+		boardSize:    boardSize,
+		players:      make([]*Player, 0),
+		finished:     false,
+		winner:       nil,
+		winchecker:   winChecker,
+		inputHandler: inputHandler,
 	}
 
 	game.players = append(game.players, players...)
@@ -39,16 +41,19 @@ func (game *gameImpl) Start() *Player {
 		currentPlayer := game.players[turn%len(game.players)]
 
 		var row, col int
-		fmt.Printf("TURN %d: %s, enter row and column: ", turn+1, currentPlayer.GetName())
-		fmt.Scanln(&row, &col)
+		var err error
+		for {
+			row, col, err = game.inputHandler.GetMove(currentPlayer, game.board)
+			if err != nil {
+				fmt.Println("Invalid input, try again.")
+				continue
+			}
 
-		row, col = row-1, col-1
-
-		err := game.board.MarkPosition(row, col, currentPlayer)
-		if err != nil {
-			fmt.Println("Invalid Move")
-			turn-- // Retry the same player
-			continue
+			if err := game.board.MarkPosition(row, col, currentPlayer); err != nil {
+				fmt.Println(err)
+				continue
+			}
+			break
 		}
 
 		game.board.ShowBoard()
