@@ -5,13 +5,14 @@ import "fmt"
 type VendingMachine interface {
 	BuyProduct(product string, quantity int, paymentMode PaymentMode) error
 	DisplayProducts()
-	AddProduct(product Product, quantity int)
+	ShowVendingMachineSales()
 }
 
 type vendingMachine struct {
 	inventory          Inventory
 	paymentHandler     PaymentHandler
 	transactionHandler TransactionHandler
+	bank               VendingMachineBank
 }
 
 func NewVendingMachine(inventory Inventory, bank VendingMachineBank) VendingMachine {
@@ -19,15 +20,11 @@ func NewVendingMachine(inventory Inventory, bank VendingMachineBank) VendingMach
 		inventory:          inventory,
 		paymentHandler:     NewPaymentHandler(bank),
 		transactionHandler: NewTransactionHandler(inventory),
+		bank:               bank,
 	}
 }
 
 func (machine *vendingMachine) BuyProduct(product string, quantity int, paymentMode PaymentMode) error {
-	inventoryProduct, err := machine.inventory.GetProduct(product)
-	if err != nil {
-		return err
-	}
-
 	stock, err := machine.inventory.GetStock(product)
 	if err != nil {
 		return err
@@ -37,15 +34,9 @@ func (machine *vendingMachine) BuyProduct(product string, quantity int, paymentM
 		return fmt.Errorf("low stock")
 	}
 
-	err = machine.paymentHandler.Pay(paymentMode, quantity)
+	err = machine.transactionHandler.Handle(product, quantity, paymentMode)
 	if err != nil {
-		return err
-	}
-
-	err = machine.transactionHandler.DeductStock(inventoryProduct, quantity)
-	if err != nil {
-		machine.paymentHandler.Refund(paymentMode, quantity)
-		return err
+		return nil
 	}
 
 	fmt.Println("Product dropped.")
@@ -56,4 +47,6 @@ func (machine *vendingMachine) DisplayProducts() {
 	machine.inventory.DisplayProducts()
 }
 
-func (machine *vendingMachine) AddProduct(product Product, quantity int) {}
+func (machine *vendingMachine) ShowVendingMachineSales() {
+	fmt.Println("Machine Sales", machine.bank.GetBalance())
+}

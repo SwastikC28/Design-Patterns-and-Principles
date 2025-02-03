@@ -5,6 +5,7 @@ import "errors"
 type VendingMachineBank interface {
 	AddBalance(amount int) error
 	Refund(amount int)
+	GetBalance() int
 }
 
 func NewVendingMachineBank() VendingMachineBank {
@@ -28,4 +29,8 @@ func (bank *vendingMachineBank) AddBalance(amount int) error {
 
 func (bank *vendingMachineBank) Refund(amount int) {
 	bank.balance -= amount
+}
+
+func (bank *vendingMachineBank) GetBalance() int {
+	return bank.balance
 }
